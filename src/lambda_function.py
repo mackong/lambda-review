@@ -1,5 +1,5 @@
 import json
-import logger
+import logging
 
 from lambda_reviewer import LambdaReviewer
 from pull_request import PullRequest
@@ -22,5 +22,5 @@ def lambda_handler(event, context):
 
         return {"statusCode": 200, "message": "ok"}
     except Exception as e:
-        logger.error(f"Error processing order: {str(e)}")
+        logging.error(f"Error processing order: {str(e)}")
         raise
