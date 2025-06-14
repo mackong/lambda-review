@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 
 import boto3
@@ -19,8 +18,8 @@ class _SecretManager:
             response = self.client.get_secret_value(SecretId=name)
             return json.loads(response["SecretString"])[name]
         except Exception as e:
-            logging.error(f"failed to get secret string `{name}` from secretsmanager, error: {str(e)}")
-            logging.warning(f"faillback to get secret string `{name}` from environment variabls")
+            print(f"failed to get secret string `{name}` from secretsmanager, error: {str(e)}")
+            print(f"faillback to get secret string `{name}` from environment variabls")
             return os.environ.get(name.upper())
 
     def get_github_token(self) -> str:
