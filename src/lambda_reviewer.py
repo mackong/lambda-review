@@ -38,15 +38,21 @@ class LambdaReviewer:
         return "\n\n".join(diffs)
 
     def _build_comment_body(self, issue: LLMReviewIssue) -> str:
-        return f"""# {issue.category}
-{issue.description}
+        return f"""> {self._build_github_alert(issue.category)}
+> {issue.description}
 
-# Fix
-{issue.fix_desc}
+> [!TIP]
+> {issue.fix_desc}
 
 ```{self._get_file_lang(issue.file)}
 {textwrap.dedent(issue.fix_code)}
 ```"""
+
+    def _build_github_alert(self, category: str) -> str:
+        if category == "Error":
+            return "[!CAUTION]"
+        else:
+            return "[!WARNING]"
 
 
 if __name__ == "__main__":
