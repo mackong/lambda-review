@@ -30,15 +30,13 @@ class ReviewLLM:
         )
 
     def _build_prompt(self, diff: str) -> str:
-        template = f"""You are a senior software engineer performing a code review.
+        template = f"""You are a senior software engineer performing a thorough code review. Analyze the provided Git diff and identify:
 
-Please analyze the following Git diff and provide suggestions for:
-
-1. **Errors** – logic bugs, missing checks, obvious mistakes
-2. **Warnings** – code smells, risky patterns, deprecated usage
-3. **Refactor Suggestions** – opportunities to improve structure, clarity
-4. **Security Issues** - SQL injection, headcoded secrets
-5. **Performance Issues** - 1+n queries, memory leaks
+1. **Errors** – Logic bugs, missing null/type checks, incorrect calculations, state issues
+2. **Warnings** – Code smells, anti-patterns, tech debt, deprecated APIs, risky practices
+3. **Refactor Suggestions** – Duplicate code, complex methods, poor structure, unclear naming
+4. **Security Issues** - Injection risks, auth issues, data exposure, hardcoded secrets
+5. **Performance Issues** - Inefficient algorithms, N+1 queries, memory leaks, blocking ops
 
 Here is the Git diffs:
 

@@ -1,5 +1,6 @@
 import os
 import textwrap
+from collections import Counter
 
 from common import GithubFile, LLMReviewIssue, SUPPORTED_LANGS
 from llm import ReviewLLM
@@ -16,12 +17,15 @@ class LambdaReviewer:
         resp = self.llm.review(diff)
         issues = resp.issues
 
+        body = f"""# LambdaReview Report
+
+{self._build_stat_table(issues)}"""
         comments = [{
             "path": issue.file,
             "line": issue.line,
             "body": self._build_comment_body(issue)
         } for issue in issues]
-        pr.create_review(body="LambdaReview Report", comments=comments)
+        pr.create_review(body=body, comments=comments)
 
     def _get_file_lang(self, fname: str) -> str:
         _, ext = os.path.splitext(fname)
@@ -53,6 +57,13 @@ class LambdaReviewer:
             return "[!CAUTION]"
         else:
             return "[!WARNING]"
+
+    def _build_stat_table(self, issues: list[LLMReviewIssue]) -> str:
+        c = Counter(issue.category for issue in issues)
+        table = "\n".join(f"{k} | {v}" for k, v in c.items())
+        return f"""Type | Count
+-- | ----
+{table}"""
 
 
 if __name__ == "__main__":

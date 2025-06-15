@@ -22,6 +22,7 @@ SUPPORTED_LANGS = {
     ".js": "javascript",
     ".py": "python",
     ".rb": "ruby",
+    ".ts": "typescrpt",
 }
 
 
